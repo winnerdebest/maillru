@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}MailRu | Invoice {% endblock %}
+
+{% block content %}
+  <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl mx-auto relative">
+    <!-- Paid Stamp (Conditional) -->
+    {% if invoice.payment_status %}
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-40">
+        {% if invoice.payment_status == 'paid' %}
+        <div class="text-6xl font-bold text-green-600 rotate-45">PAID</div>
+        {% elif invoice.payment_status == 'unpaid' %}
+        <div class="text-6xl font-bold text-red-600 rotate-45">UNPAID</div>
+        {% elif invoice.payment_status == 'refunded' %}
+        <div class="text-6xl font-bold text-blue-600 rotate-45">REFUNDED</div>
+        {% elif invoice.payment_status == 'cancelled' %}
+        <div class="text-6xl font-bold text-gray-600 rotate-45">CANCELLED</div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+
+    <!-- Invoice Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-2xl font-bold">MailRu</h1>
+      <h2 class="text-xl">Invoice #{{ invoice.id }}</h2>
+      <p class="text-gray-600">Invoice Date: {{ invoice.transaction_date }}</p>
+      <p class="text-gray-600">Due Date: {{ invoice.due_date }}</p>
+    </div>
+
+    <!-- Billed To -->
+    <div class="mb-8">
+        <h3 class="text-lg font-semibold">Invoiced To</h3>
+        <p><strong>Name:</strong> {{ invoice.user.get_full_name }}</p>
+        <p><strong>Email:</strong> {{ invoice.user.email }}</p>
+        <p><strong>Phone:</strong> {{ invoice.user.profile.phone_number }}</p>
+        <p><strong>Address:</strong> {{ invoice.user.profile.address }}</p>
+    </div>
+      
+
+    <!-- Product Details -->
+    <div class="mb-8">
+      <h3 class="text-lg font-semibold">Product Details</h3>
+      <p>{{ invoice.product_name }} ({{ invoice.get_product_type_display }})</p>
+    </div>
+
+    <!-- Invoice Table -->
+    <div class="mb-8">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="p-2 text-left">Description</th>
+            <th class="p-2 text-right">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="p-2">{{ invoice.product_name }}</td>
+            <td class="p-2 text-right">₦{{ invoice.price|intcomma }}</td>
+          </tr>
+
+          {% for charge in additional_charges %}
+            <tr class="border-b">
+              <td class="p-2">{{ charge.description }}</td>
+              <td class="p-2 text-right">₦{{ charge.amount|intcomma }}</td>
+            </tr>
+          {% endfor %}
+
+          <tr class="bg-gray-100 font-semibold">
+            <td class="p-2">Total</td>
+            <td class="p-2 text-right">₦{{ total_amount|intcomma }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Payment Status -->
+    <div class="mb-8">
+      <h3 class="text-lg font-semibold">Payment Status</h3>
+      <p class="p-2 bg-gray-200 rounded">
+        {% if invoice.payment_status == 'paid' %}
+          <span class="text-green-600">Paid</span>
+        {% elif invoice.payment_status == 'unpaid' %}
+          <span class="text-red-600">Unpaid</span>
+        {% elif invoice.payment_status == 'refunded' %}
+          <span class="text-blue-600">Refunded</span>
+        {% elif invoice.payment_status == 'cancelled' %}
+          <span class="text-gray-600">Cancelled</span>
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Download Button -->
+    <div class="text-center">
+      <a href="{% url 'download_invoice' invoice.id %}"  target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
+        Download Invoice as PDF
+      </a>
+    </div>
+  </div>
+{% endblock %}

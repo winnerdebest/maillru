@@ -1,0 +1,53 @@
+{% extends "agent/base.html" %}
+
+{% block title %}Add Invoice for {{ viewed_user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-semibold text-center mb-4">
+        Add Invoice for {{ viewed_user.get_full_name }}
+    </h2>
+    <form method="POST" class="space-y-4">
+        {% csrf_token %}
+        
+        <div>
+            <label class="block font-medium">Product Type</label>
+            {{ form.product_type }}
+        </div>
+
+        <div>
+            <label class="block font-medium">Product Name</label>
+            {{ form.product_name }}
+        </div>
+
+        <div>
+            <label class="block font-medium">Price (₦)</label>
+            {{ form.price }}
+        </div>
+
+        <div>
+            <label class="block font-medium">Transaction Date</label>
+            {{ form.transaction_date }}
+        </div>
+
+        <div>
+            <label class="block font-medium">Due Date</label>
+            {{ form.due_date }}
+        </div>
+
+        <div>
+            <label class="block font-medium">Payment Gateway</label>
+            {{ form.payment_gateway }}
+        </div>
+
+        <div>
+            <label class="block font-medium">Payment Status</label>
+            {{ form.payment_status }}
+        </div>
+
+        <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded w-full">
+            Create Invoice
+        </button>
+    </form>
+</div>
+{% endblock %}

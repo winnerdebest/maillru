@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}MailRu | Invoice List{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+  
+  <!-- Page Header -->
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Invoices</h1>
+  </div>
+
+  <!-- Search & Filter Section -->
+  <form method="get" class="bg-white p-4 rounded-lg shadow-md flex flex-col sm:flex-row gap-4">
+    <input
+      type="text"
+      name="search"
+      placeholder="Search invoices..."
+      value="{{ search_query }}"
+      class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400"
+    />
+    <select
+      name="status"
+      class="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400"
+    >
+      <option value="">All Statuses</option>
+      <option value="paid" {% if status_filter == 'paid' %}selected{% endif %}>Paid</option>
+      <option value="unpaid" {% if status_filter == 'unpaid' %}selected{% endif %}>Unpaid</option>
+      <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+      <option value="refunded" {% if status_filter == 'refunded' %}selected{% endif %}>Refunded</option>
+    </select>
+    <input
+      type="date"
+      name="date"
+      value="{{ date_filter }}"
+      class="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400"
+    />
+    <div class="flex gap-4">
+      <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+        Filter
+      </button>
+      <a href="{% url 'invoice_list' %}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+        Reset
+      </a>
+    </div>
+  </form>
+
+  <!-- Responsive Invoices Section -->
+  <div class="space-y-4">
+    
+    <!-- Mobile View: Cards -->
+    <div class="grid gap-4 md:hidden">
+      {% for invoice in invoices %}
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-bold text-gray-800">#{{ invoice.id }}</h2>
+          <span class="px-3 py-1 text-sm font-semibold rounded-full
+            {% if invoice.payment_status == 'Paid' %}bg-green-100 text-green-600
+            {% elif invoice.payment_status == 'Unpaid' %}bg-red-100 text-red-600
+            {% elif invoice.payment_status == 'Refunded' %}bg-blue-100 text-blue-600
+            {% elif invoice.payment_status == 'Cancelled' %}bg-gray-100 text-gray-600
+            {% endif %}">
+            {{ invoice.get_payment_status_display }}
+          </span>
+        </div>
+        <p class="text-gray-700">{{ invoice.user.get_full_name }}</p>
+        <p class="text-gray-500">{{ invoice.product_name }}</p>
+        <p class="text-lg font-semibold text-purple-700">₦{{ invoice.price|intcomma }}</p>
+        <p class="text-gray-600 text-sm">Due: {{ invoice.due_date|date:"Y-m-d" }}</p>
+        <div class="mt-2">
+          <a href="{% url 'invoice_page' invoice.id %}" class="text-purple-600 font-semibold hover:underline">View Details</a>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center text-gray-500">No invoices found.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Desktop View: Table -->
+    <div class="hidden md:block overflow-x-auto bg-white rounded-lg shadow-md">
+      <table class="w-full border-collapse text-left">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="p-3 sm:p-4">Invoice #</th>
+            <th class="p-3 sm:p-4">Customer</th>
+            <th class="p-3 sm:p-4">Product</th>
+            <th class="p-3 sm:p-4">Amount</th>
+            <th class="p-3 sm:p-4">Status</th>
+            <th class="p-3 sm:p-4">Due Date</th>
+            <th class="p-3 sm:p-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for invoice in invoices %}
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-3 sm:p-4">{{ invoice.id }}</td>
+            <td class="p-3 sm:p-4">{{ invoice.user.get_full_name }}</td>
+            <td class="p-3 sm:p-4">{{ invoice.product_name }}</td>
+            <td class="p-3 sm:p-4">₦{{ invoice.price|intcomma }}</td>
+            <td class="p-3 sm:p-4">
+              <span class="px-3 py-1 text-sm font-semibold rounded-full
+                {% if invoice.payment_status == 'Paid' %}bg-green-100 text-green-600
+                {% elif invoice.payment_status == 'Unpaid' %}bg-red-100 text-red-600
+                {% elif invoice.payment_status == 'Refunded' %}bg-blue-100 text-blue-600
+                {% elif invoice.payment_status == 'Cancelled' %}bg-gray-100 text-gray-600
+                {% endif %}">
+                {{ invoice.get_payment_status_display }}
+              </span>
+            </td>
+            <td class="p-3 sm:p-4">{{ invoice.due_date|date:"Y-m-d" }}</td>
+            <td class="p-3 sm:p-4">
+              <a href="{% url 'invoice_page' invoice.id %}" class="text-purple-600 hover:underline">View</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-center p-6 text-gray-500">No invoices found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

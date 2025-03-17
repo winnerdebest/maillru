@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}MailRu | Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto mt-10 bg-gray-800 p-8 rounded-lg shadow-lg">
+    <h2 class="text-3xl font-bold text-gray-100 mb-6 text-center">My Profile</h2>
+
+    <!-- Profile Information -->
+    <div class="space-y-4">
+        <div class="bg-gray-700 p-4 rounded-lg">
+            <p class="text-sm font-medium text-gray-300">Username</p>
+            <p class="text-lg font-semibold text-gray-100">{{ user.username }}</p>
+        </div>
+
+        <div class="bg-gray-700 p-4 rounded-lg">
+            <p class="text-sm font-medium text-gray-300">Email</p>
+            <p class="text-lg font-semibold text-gray-100">{{ user.email }}</p>
+        </div>
+
+        <div class="bg-gray-700 p-4 rounded-lg">
+            <p class="text-sm font-medium text-gray-300">First Name</p>
+            <p class="text-lg font-semibold text-gray-100">{{ user.first_name }}</p>
+        </div>
+
+        <div class="bg-gray-700 p-4 rounded-lg">
+            <p class="text-sm font-medium text-gray-300">Last Name</p>
+            <p class="text-lg font-semibold text-gray-100">{{ user.last_name }}</p>
+        </div>
+    </div>
+
+    <!-- Edit Profile Button -->
+    <div class="mt-8 text-center">
+        <a href="{% url 'edit_profile' %}" class="inline-block bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg transition duration-300">
+            Edit Profile
+        </a>
+    </div>
+</div>
+{% endblock %}

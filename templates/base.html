@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %} MailRu |{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <!-- Dashboard Container -->
+  <div class="flex min-h-screen">
+    <!-- Sidebar Toggle Button (Mobile Only) -->
+    <button id="sidebarToggle" class="md:hidden fixed top-4 left-4 p-2 bg-gray-800 text-white rounded-lg z-50">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-gray-800 text-gray-200 w-64 space-y-6 px-4 py-7 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out z-40">
+        <h1 class="text-xl font-bold">Info</h1>
+        
+
+<!-- Status Section -->
+<!-- Status Section -->
+<div class="bg-gray-700 p-4 rounded-lg">
+  <h3 class="text-lg font-semibold mb-4">Status</h3>
+  <ul class="space-y-2">
+      <!-- Paid -->
+      <li>
+          <a href="{% url 'invoice_list' %}?status=Paid" class="flex justify-between hover:bg-gray-600 p-2 rounded-lg transition-colors duration-200">
+              <span>Paid</span>
+              <span class="bg-gray-600 px-2 py-1 rounded">{{ paid_count }}</span>
+          </a>
+      </li>
+      <!-- Unpaid -->
+      <li>
+          <a href="{% url 'invoice_list' %}?status=Unpaid" class="flex justify-between hover:bg-gray-600 p-2 rounded-lg transition-colors duration-200">
+              <span>Unpaid</span>
+              <span class="bg-gray-600 px-2 py-1 rounded">{{ unpaid_count }}</span>
+          </a>
+      </li>
+      <!-- Cancelled -->
+      <li>
+          <a href="{% url 'invoice_list' %}?status=Cancelled" class="flex justify-between hover:bg-gray-600 p-2 rounded-lg transition-colors duration-200">
+              <span>Cancelled</span>
+              <span class="bg-gray-600 px-2 py-1 rounded">{{ cancelled_count }}</span>
+          </a>
+      </li>
+      <!-- Refunded -->
+      <li>
+          <a href="{% url 'invoice_list' %}?status=Refunded" class="flex justify-between hover:bg-gray-600 p-2 rounded-lg transition-colors duration-200">
+              <span>Refunded</span>
+              <span class="bg-gray-600 px-2 py-1 rounded">{{ refunded_count }}</span>
+          </a>
+      </li>
+  </ul>
+</div>
+
+
+      <!-- Billing Section -->
+      <div class="bg-gray-700 p-4 rounded-lg">
+        <h3 class="text-lg font-semibold mb-4">Billing</h3>
+        <ul class="space-y-2">
+          <li>
+            <a href="{% url "invoice_list" %}" class="block py-2 px-4 bg-gray-600 rounded-lg hover:bg-gray-500">My Invoices</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Create Tickets-->
+      <div class="bg-gray-700 p-4 rounded-lg">
+        <h3 class="text-lg font-semibold mb-4">Contact Support</h3>
+        <ul class="space-y-2">
+          <li>
+            <a href="mailto:support@example.com?subject=I%20have%20a%20complaint&body=Write%20your%20complaint%20here" 
+               class="block py-2 px-4 bg-gray-600 rounded-lg hover:bg-gray-500">
+               Create Ticket
+            </a> 
+        </li>
+        
+          <li>
+            <a href="mailto:support@example.com?subject=I%20have%20a%20complaint&body=Write%20your%20complaint%20here" class="block py-2 px-4 bg-gray-600 rounded-lg hover:bg-gray-500">Ask For Help</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 md:ml-64">
+      <!-- Header -->
+      <header class="bg-gray-900 text-white p-4 pl-16 md:pl-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">MailRu</h1>
+        <div class="flex items-center space-x-4">
+          <span>Welcome, {{user.get_full_name|default:user.username}}</span>
+          <div class="relative">
+            <button class="flex items-center focus:outline-none">
+              <img src="https://as1.ftcdn.net/v2/jpg/05/87/76/66/1000_F_587766653_PkBNyGx7mQh9l1XXPtCAq1lBgOsLl6xH.jpg" alt="User Avatar" class="w-8 h-8 rounded-full">
+              <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <!-- User Dropdown -->
+            <div class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg hidden">
+              <a href="{% url "user_profile" %}" class="block px-4 py-2 text-sm hover:bg-gray-700">Profile</a>
+              <!--<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-700">Settings</a>-->
+              <a href="{% url "logout" %}" class="block px-4 py-2 text-sm hover:bg-gray-700">Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <main class="p-6">
+        {% block content %}
+        {% endblock content %}
+      </main>
+    </div>
+  </div> 
+
+  <!-- JavaScript for Sidebar Toggle and Dropdowns -->
+  <script>
+    // Toggle sidebar on mobile
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    if (sidebarToggle && sidebar) {
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+      });
+    }
+
+    // Toggle user dropdown
+    const userDropdownButton = document.querySelector('.flex.items-center.focus\\:outline-none');
+    const userDropdownMenu = document.querySelector('.absolute.right-0.mt-2.w-48.bg-gray-800.rounded-lg.shadow-lg.hidden');
+    if (userDropdownButton && userDropdownMenu) {
+      userDropdownButton.addEventListener('click', () => {
+        userDropdownMenu.classList.toggle('hidden');
+      });
+    }
+  </script>
+</body>
+</html>

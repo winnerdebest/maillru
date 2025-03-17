@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to Maillru</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Add a pseudo-element for the gray overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(75, 85, 99, 0.5); /* Gray with 50% opacity */
+            z-index: -1;
+        }
+        body {
+            position: relative;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="h-screen bg-cover bg-center flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1508780709619-79562169bc64?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+    <div class="bg-gray-800 bg-opacity-90 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-semibold text-gray-100 text-center mb-4">Welcome to Maillru</h2>
+        <p class="text-sm text-gray-300 text-center mb-6">Login into your dashboard</p>
+
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <p class="text-sm font-medium {% if message.tags == 'error' %} text-red-600 bg-red-100 {% else %} text-green-600 bg-green-100 {% endif %} p-3 rounded">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-300">Username or Email</label>
+                <input type="text" name="identifier" class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:ring-2 focus:ring-gray-500" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-300">Password</label>
+                <input type="password" name="password" class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-gray-700 text-gray-100 focus:ring-2 focus:ring-gray-500" required>
+            </div>
+
+            <div class="mb-6 flex items-center justify-between">
+                <div class="flex items-center">
+                    <input type="checkbox" name="remember_me" id="remember_me" class="w-4 h-4 text-gray-600 border-gray-600 rounded bg-gray-700 focus:ring-gray-500">
+                    <label for="remember_me" class="ml-2 text-sm text-gray-300">Remember Me</label>
+                </div>
+                <a href="mailto:support@example.com?subject=I%20forgot%20my%20password&body=Please%20put%20your%20email%20here" class="text-sm text-gray-400 hover:text-gray-200">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="w-full bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-lg transition duration-300 focus:ring-2 focus:ring-gray-500">
+                Login
+            </button>
+        </form>
+    </div>
+</body>
+</html>

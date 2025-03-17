@@ -1,0 +1,125 @@
+{% extends "agent/base.html" %}
+{% load humanize %}
+
+{% block title %}Invoices - {{ user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="flex gap-6">
+    <!-- User Info Sidebar -->
+    <div class="w-1/3 bg-white shadow-md rounded-lg p-6">
+        <img src="https://as1.ftcdn.net/v2/jpg/05/87/76/66/1000_F_587766653_PkBNyGx7mQh9l1XXPtCAq1lBgOsLl6xH.jpg" 
+             alt="User Image" class="w-24 h-24 rounded-full mx-auto">
+        <h2 class="text-xl font-semibold text-center mt-4">{{ user.get_full_name|default:user.username }}</h2>
+        <p class="text-gray-600 text-center">{{ user.email }}</p>
+        <p class="text-gray-600 text-center">{{ user.profile.phone_number }}</p>
+
+        <!-- Reset Password Button -->
+        <a href="{% url 'agent:change_user_password' user.id %}" 
+           class="mt-4 block text-center bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+           Reset Password
+        </a>
+    </div>
+
+    <!-- Invoice List -->
+    <div class="w-2/3">
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <!-- Add Invoice Button -->
+            <div class="mb-4 flex justify-end">
+                <a href="{% url 'agent:add_invoice' user.id %}" 
+                   class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                   + Add Invoice
+                </a>
+            </div>
+
+            <!-- Search & Sorting -->
+            <div class="flex justify-between items-center mb-4">
+                <form method="GET" class="flex gap-2 w-full">
+                    <input type="text" name="q" placeholder="Search invoices by name or ID..." 
+                           value="{{ query }}" class="p-2 border border-gray-300 rounded w-full">
+                    <button type="submit" class="bg-purple-600 text-white px-4 py-2 rounded">Search</button>
+                </form>
+            </div>
+
+            <!-- Sorting Options -->
+            <div class="flex gap-4 mb-4">
+                {% for field, label in sort_options.items %}
+                    <a href="?q={{ query }}&sort={{ field }}&order={% if sort_by == field and order == 'asc' %}desc{% else %}asc{% endif %}"
+                       class="px-4 py-2 rounded-lg {% if sort_by == field %}bg-purple-600 text-white{% else %}bg-gray-200 text-gray-700{% endif %}">
+                        {{ label }} {% if sort_by == field %}{% if order == 'asc' %}▲{% else %}▼{% endif %}{% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+
+            <!-- Invoice Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="p-3 border">Invoice ID</th>
+                            <th class="p-3 border">Product Name</th>
+                            <th class="p-3 border">Price</th>
+                            <th class="p-3 border">Transaction Date</th>
+                            <th class="p-3 border">Due Date</th>
+                            <th class="p-3 border">Status</th>
+                            <th class="p-3 border">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for invoice in invoices %}
+                        <tr class="text-center {% if invoice.is_overdue %}bg-red-100{% endif %}">
+                            <td class="p-3 border">{{ invoice.id }}</td>
+                            <td class="p-3 border">{{ invoice.product_name }}</td>
+                            <td class="p-3 border">₦{{ invoice.price|intcomma }}</td>
+                            <td class="p-3 border">{{ invoice.transaction_date|date:"Y-m-d H:i" }}</td>
+                            <td class="p-3 border">{{ invoice.due_date|date:"Y-m-d" }}</td>
+                            <td class="p-3 border">
+                                {% if invoice.payment_status == 'paid' %}
+                                    <span class="text-green-600 font-semibold">Paid</span>
+                                {% elif invoice.payment_status == 'unpaid' %}
+                                    <span class="text-red-600 font-semibold">Unpaid</span>
+                                {% elif invoice.payment_status == 'cancelled' %}
+                                    <span class="text-gray-600 font-semibold">Cancelled</span>
+                                {% else %}
+                                    <span class="text-yellow-600 font-semibold">Refunded</span>
+                                {% endif %}
+                            </td>
+                            <td class="p-3 border">
+                                <a href="{% url 'agent:edit_invoice' user_id=invoice.user.id invoice_id=invoice.id %}" 
+                                   class="text-blue-600 hover:underline">Edit</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center p-3">No invoices found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-4 flex justify-center">
+                <nav class="flex">
+                    {% if invoices.has_previous %}
+                        <a href="?q={{ query }}&sort={{ sort_by }}&order={{ order }}&page=1" 
+                           class="px-3 py-2 border rounded-l bg-gray-200">First</a>
+                        <a href="?q={{ query }}&sort={{ sort_by }}&order={{ order }}&page={{ invoices.previous_page_number }}" 
+                           class="px-3 py-2 border bg-gray-200">Previous</a>
+                    {% endif %}
+
+                    <span class="px-3 py-2 border bg-gray-300">
+                        {{ invoices.number }} of {{ invoices.paginator.num_pages }}
+                    </span>
+
+                    {% if invoices.has_next %}
+                        <a href="?q={{ query }}&sort={{ sort_by }}&order={{ order }}&page={{ invoices.next_page_number }}" 
+                           class="px-3 py-2 border bg-gray-200">Next</a>
+                        <a href="?q={{ query }}&sort={{ sort_by }}&order={{ order }}&page={{ invoices.paginator.num_pages }}" 
+                           class="px-3 py-2 border rounded-r bg-gray-200">Last</a>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

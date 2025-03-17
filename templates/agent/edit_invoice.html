@@ -1,0 +1,54 @@
+{% extends "agent/base.html" %}
+
+{% block content %}
+<div class="container mx-auto mt-8">
+    <h2 class="text-xl font-semibold mb-4">Edit Invoice #{{ invoice.id }}</h2>
+
+    <form method="post" class="space-y-4 bg-white shadow-md rounded-lg p-6">
+        {% csrf_token %}
+        
+        <label class="block">
+            <span class="text-gray-700">Product Type:</span>
+            {{ form.product_type }}
+        </label>
+
+        <label class="block">
+            <span class="text-gray-700">Product Name:</span>
+            {{ form.product_name }}
+        </label>
+
+        <label class="block">
+            <span class="text-gray-700">Price:</span>
+            {{ form.price }}
+        </label>
+
+        <label class="block">
+            <span class="text-gray-700">Transaction Date:</span>
+            {{ form.transaction_date }}
+        </label>
+
+        <label class="block">
+            <span class="text-gray-700">Due Date:</span>
+            {{ form.due_date }}
+        </label>
+
+        <label class="block">
+            <span class="text-gray-700">Payment Gateway:</span>
+            {{ form.payment_gateway }}
+        </label>
+
+        <label class="block">
+            <span class="text-gray-700">Payment Status:</span>
+            {{ form.payment_status }}
+        </label>
+
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+            Save Changes
+        </button>
+
+        <a href="{% url 'agent:user_invoice_list' user_id %}" class="ml-4 text-gray-500">
+            Cancel
+        </a>
+    </form>
+</div>
+{% endblock %}

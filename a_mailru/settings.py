@@ -26,12 +26,27 @@ if ENVIRONMENT == 'development':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['maillru.onrender.com', 'user.maillru.com', 'www.user.maillru.com',]
 
-CSRF_TRUSTED_ORIGINS = ["https://*.ngrok-free.app",]
+CSRF_TRUSTED_ORIGINS = ["https://*.ngrok-free.app", "https://maillru.onrender.com", "https://user.maillru.com", "https://www.user.maillru.com/"]
+
+
+
+# Redirect HTTP to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# Ensure Django recognizes the forwarded protocol from Render
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Set this to True to enable HTTPS cookies
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+
 
 
 

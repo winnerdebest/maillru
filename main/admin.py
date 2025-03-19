@@ -4,6 +4,13 @@ from django.contrib.auth.models import User
 from . models import *
 
 
+
+
+admin.site.site_header = "Maillru Administration"
+admin.site.site_title = "Maillru Admin"
+admin.site.index_title = "Welcome to Maillru Administration"
+
+
 # Inline for UserProfile
 class UserProfileInline(admin.StackedInline):
     model = UserProfile

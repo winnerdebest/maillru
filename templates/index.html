@@ -1,23 +1,305 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %} MailRu | Dashboard {% endblock title %}
+{% block title %}MailRu | Home{% endblock %}
 
 {% block content %}
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-800">
-  <div class="bg-gray-600 text-white p-8 rounded-lg shadow-lg text-center w-full max-w-2xl">
-    <h1 class="text-3xl font-bold">Welcome to MailRu</h1>
-    <p class="text-lg mt-2">Your one-stop platform for seamless email and domain management.</p>
-    
-    <div class="mt-6">
-      <p class="text-sm opacity-80">Let’s get things done today!</p>
-      <div class="mt-4 text-lg font-semibold animate-pulse">
-        🚀 Optimized. Secure. Efficient. 🚀
+  <!-- Welcome Message Section -->
+  <section class="py-16 bg-gradient-to-r from-[#1a535c] to-[#0d3b4a]" data-aos="fade-down">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Welcome to MailRu</h1>
+      <p class="text-lg text-gray-200 max-w-2xl mx-auto">
+        Your trusted partner for reliable and scalable email and domain solutions. Choose from our range of plans designed to meet your business needs.
+      </p>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section class="py-16 bg-[#f7f9fd]">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <h2 class="text-3xl font-bold text-[#1a535c] mb-4">About Us</h2>
+        <p class="text-lg text-[#0d3b4a] max-w-2xl mx-auto">
+          Maillru is a Domain and Email Hosting platform from Serverlink, designed to make your online presence simple, affordable, and reliable.
+        </p>
+      </div>
+
+      <!-- About Serverlink -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Left Column: About Serverlink -->
+        <div class="bg-white p-8 rounded-xl shadow-lg" data-aos="fade-right">
+          <h3 class="text-2xl font-bold text-[#1a535c] mb-4">Who We Are</h3>
+          <p class="text-[#0d3b4a] mb-4">
+            Serverlink was born in 2012 and registered to give people an easy and affordable way to get their ideas online. These days, having an online presence isn't just a privilege, it's a necessity. We believe it's a basic right.
+          </p>
+          <p class="text-[#0d3b4a] mb-4">
+            We provide affordable domain registration, email hosting, and cloud services to over 200 sites, blogs, and applications, and support over 10,000 users—web designers, developers, content creators, small businesses, and entrepreneurs.
+          </p>
+          <div class="mt-6">
+            <h4 class="text-xl font-bold text-[#1a535c] mb-2">Need Help? Call Us 24/7:</h4>
+            <a href="tel:09043158643" class="text-[#4ecdc4] hover:text-[#3ba89f] transition-colors duration-300">
+              0904 315 8643
+            </a>
+          </div>
+          <div class="mt-6">
+            <a href="#" class="inline-block bg-gradient-to-r from-[#4ecdc4] to-[#3ba89f] text-white px-6 py-3 rounded-lg hover:from-[#3ba89f] hover:to-[#2a7a72] transition-all duration-300">
+              Sign Up for Special Offers
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column: Services -->
+        <div class="bg-white p-8 rounded-xl shadow-lg" data-aos="fade-left">
+          <h3 class="text-2xl font-bold text-[#1a535c] mb-4">Our Services</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Hosting Packages -->
+            <div>
+              <h4 class="text-xl font-bold text-[#1a535c] mb-2">Hosting Packages</h4>
+              <ul class="text-[#0d3b4a] space-y-2">
+                <li>Web Hosting</li>
+                <li>WordPress Hosting</li>
+                <li>Cloud Hosting</li>
+                <li>Email Hosting</li>
+              </ul>
+            </div>
+
+            <!-- Domains -->
+            <div>
+              <h4 class="text-xl font-bold text-[#1a535c] mb-2">Domains</h4>
+              <ul class="text-[#0d3b4a] space-y-2">
+                <li>Domain Registration</li>
+                <li>.NG Domain Registration</li>
+                <li>Free DNS</li>
+              </ul>
+            </div>
+
+            <!-- Other Services -->
+            <div>
+              <h4 class="text-xl font-bold text-[#1a535c] mb-2">Other Services</h4>
+              <ul class="text-[#0d3b4a] space-y-2">
+                <li>Web Design</li>
+                <li>SSL Certificates</li>
+              </ul>
+            </div>
+
+            <!-- SSL Certificates -->
+            <div>
+              <h4 class="text-xl font-bold text-[#1a535c] mb-2">SSL Certificates</h4>
+              <p class="text-[#0d3b4a]">
+                Earn trust with SSL. For your business to succeed, customers need to trust your website.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+<!-- Domain Search Section -->
+<section class="py-16 bg-[#f7f9fd]">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center text-[#1a535c] mb-6" data-aos="fade-up">Search for a Domain</h2>
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md">
+      <div class="flex flex-col md:flex-row gap-4">
+        <input type="text" id="domain-search" placeholder="Enter your domain name" class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4ecdc4]">
+        <button onclick="searchDomain()" class="bg-gradient-to-r from-[#4ecdc4] to-[#3ba89f] text-white px-6 py-3 rounded-lg hover:from-[#3ba89f] hover:to-[#2a7a72] transition-all duration-300">
+          Search
+        </button>
+      </div>
+      <p id="search-result" class="text-center text-[#1a535c] font-semibold mt-4"></p>
+    </div>
+
+    <div class="mt-8 text-center">
+      <h3 class="text-2xl font-bold text-[#1a535c] mb-2">Domain Pricing</h3>
+      <p class="text-lg text-[#0d3b4a]">
+        .com ₦30,500 | .com.ng ₦15,000 | .ng ₦22,000 | .org ₦35,000 | .biz ₦40,000 | .online ₦15,000
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- Domain Products Section -->
+<section class="py-16 bg-[#f7f9fd]">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center text-[#1a535c] mb-12" data-aos="fade-up">Our Domain Products</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Basic Plan -->
+      <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="100">
+        <h3 class="text-2xl font-bold text-[#1a535c] mb-4">Basic</h3>
+        <p class="text-4xl font-bold text-[#1a535c] mb-6">₦95,000 <span class="text-lg text-[#4ecdc4]">/ Year</span></p>
+        <ul class="text-[#0d3b4a] mb-6 space-y-2">
+          <li>Responsive Designs</li>
+          <li>Dashboards</li>
+          <li>200 MB Storage</li>
+          <li>6 MB Bandwidth</li>
+          <li>24 Hours Support</li>
+        </ul>
+        <a href="https://maillru.com/domain-and-hosting-basic-plan/" target=_blank class="inline-block bg-gradient-to-r from-[#4ecdc4] to-[#3ba89f] text-white px-6 py-3 rounded-lg hover:from-[#3ba89f] hover:to-[#2a7a72] transition-all duration-300">
+          Subscribe Now
+        </a>
+      </div>
+
+      <!-- Business Plan -->
+      <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="200">
+        <h3 class="text-2xl font-bold text-[#1a535c] mb-4">Business</h3>
+        <p class="text-4xl font-bold text-[#1a535c] mb-6">₦150,000 <span class="text-lg text-[#4ecdc4]">/ Year</span></p>
+        <ul class="text-[#0d3b4a] mb-6 space-y-2">
+          <li>Responsive Designs</li>
+          <li>Dashboards</li>
+          <li>400 MB Storage</li>
+          <li>12 MB Bandwidth</li>
+          <li>24 Hours Support</li>
+        </ul>
+        <a href="https://maillru.com/domain-and-hosting-business-plan/" target=_blank class="inline-block bg-gradient-to-r from-[#4ecdc4] to-[#3ba89f] text-white px-6 py-3 rounded-lg hover:from-[#3ba89f] hover:to-[#2a7a72] transition-all duration-300">
+          Subscribe Now
+        </a>
+      </div>
+
+      <!-- Professional Plan -->
+      <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="300">
+        <h3 class="text-2xl font-bold text-[#1a535c] mb-4">Professional</h3>
+        <p class="text-4xl font-bold text-[#1a535c] mb-6">₦180,000 <span class="text-lg text-[#4ecdc4]">/ Year</span></p>
+        <ul class="text-[#0d3b4a] mb-6 space-y-2">
+          <li>Responsive Designs</li>
+          <li>Dashboards</li>
+          <li>500 MB Storage</li>
+          <li>25 MB Bandwidth</li>
+          <li>24 Hours Support</li>
+        </ul>
+        <a href="https://maillru.com/domain-and-hosting-professional-plan/" target=_blank class="inline-block bg-gradient-to-r from-[#4ecdc4] to-[#3ba89f] text-white px-6 py-3 rounded-lg hover:from-[#3ba89f] hover:to-[#2a7a72] transition-all duration-300">
+          Subscribe Now
+        </a>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="mt-8 text-center">
-    <p class="text-gray-600 text-lg">Need assistance? <a href="#" class="text-purple-600 font-semibold hover:underline">Contact Support</a></p>
-  </div>
-</div>
-{% endblock content %}
+<!-- JavaScript for Domain Search -->
+<script>
+  async function searchDomain() {
+      let domainInput = document.getElementById("domain-search");
+      let resultElement = document.getElementById("search-result");
+
+      let domain = domainInput.value.trim();
+      if (domain === "") {
+          resultElement.innerText = "Please enter a domain name.";
+          return;
+      }
+
+      resultElement.innerText = "Checking availability...";
+
+      let apiUrl = `/?domain=${domain}`;
+
+      try {
+          let response = await fetch(apiUrl);
+          let data = await response.json();
+
+          let domainPrices = {
+              ".com": 30500, ".com.ng": 15000, ".ng": 22000, 
+              ".org": 35000, ".biz": 40000, ".online": 15000
+          };
+
+          let extension = "." + domain.split(".").pop();
+          let price = domainPrices[extension] || "N/A";
+
+          if (data.available) {
+              resultElement.innerText = `✅ ${domain} is available for ₦${price}.`;
+          } else {
+              resultElement.innerText = `❌ ${domain} is already taken.`;
+          }
+      } catch (error) {
+          resultElement.innerText = "Error checking domain availability. Please try again.";
+          console.error("Error:", error);
+      }
+  }
+</script>
+
+
+  
+
+  <!-- Email Solutions Section -->
+  <section class="py-16 bg-[#f7f9fd]">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center text-[#1a535c] mb-12" data-aos="fade-up">Our Email Solutions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Enterprise Email - Basic -->
+        <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="text-2xl font-bold text-[#1a535c] mb-4">Basic</h3>
+          
+          <ul class="text-[#0d3b4a] mb-6 space-y-2">
+            <li>1 Email Account Included</li>
+            <li>Upgradable up to 5 Email Accounts</li>
+            <li>25GB Email Storage per Account</li>
+            <li>5GB File Storage per Account</li>
+            <li>Inbuilt Virus Protection</li>
+          </ul>
+          <p class="text-4xl font-bold text-[#1a535c] mb-6">₦5,200 <span class="text-lg text-[#4ecdc4]">/ Month</span></p>
+          <a href="https://maillru.com/get-email/" target=_blank class="inline-block bg-gradient-to-r from-[#4ecdc4] to-[#3ba89f] text-white px-6 py-3 rounded-lg hover:from-[#3ba89f] hover:to-[#2a7a72] transition-all duration-300">
+            Get Started
+          </a>
+        </div>
+
+        <!-- Enterprise Email - Standard -->
+        <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="200">
+          <h3 class="text-2xl font-bold text-[#1a535c] mb-4">Standard</h3>
+          
+          <ul class="text-[#0d3b4a] mb-6 space-y-2">
+            <li>6 Email Accounts Included</li>
+            <li>Upgradable up to 25 Email Accounts</li>
+            <li>25GB Email Storage per Account</li>
+            <li>5GB File Storage per Account</li>
+            <li>Inbuilt Virus Protection</li>
+          </ul>
+          <p class="text-4xl font-bold text-[#1a535c] mb-6">₦31,200 <span class="text-lg text-[#4ecdc4]">/ Month</span></p>
+          <a href="https://maillru.com/get-email/" target=_blank class="inline-block bg-gradient-to-r from-[#4ecdc4] to-[#3ba89f] text-white px-6 py-3 rounded-lg hover:from-[#3ba89f] hover:to-[#2a7a72] transition-all duration-300">
+            Get Started
+          </a>
+        </div>
+
+        <!-- Enterprise Email - Advanced -->
+        <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="300">
+          <h3 class="text-2xl font-bold text-[#1a535c] mb-4">Advanced</h3>
+          
+          <ul class="text-[#0d3b4a] mb-6 space-y-2">
+            <li>26 Email Accounts Included</li>
+            <li>Upgradable up to 49 Email Accounts</li>
+            <li>25GB Email Storage per Account</li>
+            <li>Inbuilt Virus Protection</li>
+          </ul>
+          <p class="text-4xl font-bold text-[#1a535c] mb-6">₦135,200 <span class="text-lg text-[#4ecdc4]">/ Month</span></p>
+          <a href="https://maillru.com/get-email/" target=_blank class="inline-block bg-gradient-to-r from-[#4ecdc4] to-[#3ba89f] text-white px-6 py-3 rounded-lg hover:from-[#3ba89f] hover:to-[#2a7a72] transition-all duration-300">
+            Get Started
+          </a>
+        </div>
+
+        <!-- Enterprise Email - Premium -->
+        <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition-transform duration-300" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="text-2xl font-bold text-[#1a535c] mb-4">Premium</h3>
+          
+          <ul class="text-[#0d3b4a] mb-6 space-y-2">
+            <li>50 Email Accounts Included</li>
+            <li>Upgradable up to 200,000 Email Accounts</li>
+            <li>25GB Email Storage per Account</li>
+            <li>5GB File Storage per Account</li>
+            <li>Inbuilt Virus Protection</li>
+          </ul>
+          <p class="text-4xl font-bold text-[#1a535c] mb-6">₦200,200 <span class="text-lg text-[#4ecdc4]">/ Month</span></p>
+          <a href="https://maillru.com/get-email/" target=_blank class="inline-block bg-gradient-to-r from-[#4ecdc4] to-[#3ba89f] text-white px-6 py-3 rounded-lg hover:from-[#3ba89f] hover:to-[#2a7a72] transition-all duration-300">
+            Get Started
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AOS Initialization -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000, // Animation duration
+      once: true, // Only animate once
+    });
+  </script>
+{% endblock %}

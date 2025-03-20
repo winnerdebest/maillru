@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import SetPasswordForm
 from .models import *
 from django.db.models import Q
 from django.http import HttpResponse
@@ -8,7 +9,29 @@ from django.db.models import Count
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+
+import requests
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+
 from .forms import *
+
+
+# Reset password form
+@login_required
+def reset_password(request):
+    if request.method == "POST":
+        form = SetPasswordForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("password_change_done")  # Redirect to success page
+    else:
+        form = SetPasswordForm(request.user)
+
+    return render(request, "password_change.html", {"form": form})
+
 
 
 #For login and logout logic
@@ -48,9 +71,37 @@ def custom_login(request):
 
 
 @login_required(login_url='login')
+@csrf_exempt
 def index(request):
-    return render(request, 'index.html')
+    if request.method == "GET" and "domain" in request.GET:
+        domain = request.GET.get("domain", "").strip()
+        if not domain:
+            return JsonResponse({"error": "Domain is required"}, status=400)
 
+        # Domainr API URL (No API key required)
+        api_url = f"https://api.domainr.com/v2/status?domain={domain}&mashape-key=free"
+
+        try:
+            response = requests.get(api_url)
+            data = response.json()
+
+            # Debugging: Print response
+            print("Domainr API Response:", data)
+
+            if response.status_code == 200 and "status" in data:
+                availability = data["status"][0]["status"]
+
+                # Check if the domain is available
+                available = availability in ["inactive", "undelegated", "available"]
+
+                return JsonResponse({"domain": domain, "available": available})
+            else:
+                return JsonResponse({"error": "Invalid response from API", "details": data}, status=500)
+
+        except requests.RequestException as e:
+            return JsonResponse({"error": "API request failed", "details": str(e)}, status=500)
+
+    return render(request, "index.html")
 
 
 # USer Profile settings

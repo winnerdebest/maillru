@@ -26,21 +26,31 @@ if ENVIRONMENT == 'development':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['maillru.onrender.com', 'user.maillru.com', 'www.user.maillru.com',]
-
-CSRF_TRUSTED_ORIGINS = ["https://*.ngrok-free.app", "https://maillru.onrender.com", "https://user.maillru.com", "https://www.user.maillru.com/"]
 
 
 
-# Redirect HTTP to HTTPS
-SECURE_SSL_REDIRECT = True
-
-# Ensure Django recognizes the forwarded protocol from Render
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Set this to True to enable HTTPS cookies
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+if ENVIRONMENT == "development":
+    ALLOWED_HOSTS = ["*"]
+    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000", "https://*.ngrok-free.app",]  # No HTTPS in local dev
+    SECURE_SSL_REDIRECT = False  # Disable HTTPS redirection
+    SESSION_COOKIE_SECURE = False  # Allow non-HTTPS cookies
+    CSRF_COOKIE_SECURE = False  # Allow non-HTTPS CSRF cookies
+    SECURE_PROXY_SSL_HEADER = None  # Don't use proxy headers locally
+else:
+    ALLOWED_HOSTS = [
+        "maillru.onrender.com",
+        "user.maillru.com",
+        "www.user.maillru.com",
+    ]
+    CSRF_TRUSTED_ORIGINS = [
+        "https://maillru.onrender.com",
+        "https://user.maillru.com",
+        "https://www.user.maillru.com/",
+    ]
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 
@@ -112,7 +122,7 @@ DATABASES = {
 }
 
 
-POSTGRESS_LOCALLY = True
+POSTGRESS_LOCALLY = False
 if ENVIRONMENT == 'production' or POSTGRESS_LOCALLY == True:
         DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 

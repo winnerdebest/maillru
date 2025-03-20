@@ -29,10 +29,13 @@
         </div>
     </div>
 
-    <!-- Edit Profile Button -->
-    <div class="mt-8 text-center">
+    <!-- Profile Actions -->
+    <div class="mt-8 text-center space-y-4">
         <a href="{% url 'edit_profile' %}" class="inline-block bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg transition duration-300">
             Edit Profile
+        </a>
+        <a href="{% url 'password_reset' %}" class="inline-block bg-red-600 hover:bg-red-500 text-white font-semibold py-2 px-6 rounded-lg transition duration-300">
+            Change Password
         </a>
     </div>
 </div>

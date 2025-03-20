@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}MailRu | Invoice {% endblock %}
+{% block title %}MaillRu | Invoice{% endblock %}
 
 {% block content %}
   <div class="bg-white p-8 rounded-lg shadow-md max-w-4xl mx-auto relative">
+    
+    <!-- Pay Now Button (Only for Unpaid Invoices) -->
+    {% if invoice.payment_status == 'unpaid' %}
+      <a href="https://maillru.com/" target=_blank class="absolute top-4 right-4 bg-[#3ba89f] text-white px-6 py-3 text-lg font-semibold rounded-lg hover:bg-[#328f88] transition">
+        Pay Now
+      </a>
+    {% endif %}
+
     <!-- Paid Stamp (Conditional) -->
     {% if invoice.payment_status %}
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-40">
@@ -20,10 +28,9 @@
     </div>
     {% endif %}
 
-
     <!-- Invoice Header -->
     <div class="text-center mb-8">
-      <h1 class="text-2xl font-bold">MailRu</h1>
+      <h1 class="text-2xl font-bold">MaillRu</h1>
       <h2 class="text-xl">Invoice #{{ invoice.id }}</h2>
       <p class="text-gray-600">Invoice Date: {{ invoice.transaction_date }}</p>
       <p class="text-gray-600">Due Date: {{ invoice.due_date }}</p>
@@ -38,7 +45,6 @@
         <p><strong>Address:</strong> {{ invoice.user.profile.address }}</p>
     </div>
       
-
     <!-- Product Details -->
     <div class="mb-8">
       <h3 class="text-lg font-semibold">Product Details</h3>
@@ -78,7 +84,7 @@
     <!-- Payment Status -->
     <div class="mb-8">
       <h3 class="text-lg font-semibold">Payment Status</h3>
-      <p class="p-2 bg-gray-200 rounded">
+      <p class="p-2 bg-gray-200 rounded inline-block">
         {% if invoice.payment_status == 'paid' %}
           <span class="text-green-600">Paid</span>
         {% elif invoice.payment_status == 'unpaid' %}
@@ -93,9 +99,10 @@
 
     <!-- Download Button -->
     <div class="text-center">
-      <a href="{% url 'download_invoice' invoice.id %}"  target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
+      <a href="{% url 'download_invoice' invoice.id %}" target="_blank" class="bg-[#3ba89f] text-white px-4 py-2 rounded-lg hover:bg-[#328f88] transition-colors duration-200">
         Download Invoice as PDF
       </a>
     </div>
+
   </div>
 {% endblock %}

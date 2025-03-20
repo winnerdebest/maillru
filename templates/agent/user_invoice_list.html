@@ -10,6 +10,7 @@
         <img src="https://as1.ftcdn.net/v2/jpg/05/87/76/66/1000_F_587766653_PkBNyGx7mQh9l1XXPtCAq1lBgOsLl6xH.jpg" 
              alt="User Image" class="w-24 h-24 rounded-full mx-auto">
         <h2 class="text-xl font-semibold text-center mt-4">{{ user.get_full_name|default:user.username }}</h2>
+        <p class="text-gray-600 text-center"> {{ user.username }}</p>
         <p class="text-gray-600 text-center">{{ user.email }}</p>
         <p class="text-gray-600 text-center">{{ user.profile.phone_number }}</p>
 

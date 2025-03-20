@@ -20,7 +20,7 @@ class InvoiceForm(forms.ModelForm):
 class UserCreationForm(forms.ModelForm):
     phone_number = forms.CharField(max_length=15, required=True)
     address = forms.CharField(widget=forms.Textarea, required=True)
-    password = forms.CharField(widget=forms.PasswordInput, required=True)
+    password = forms.CharField(widget=forms.TextInput(attrs={"id": "password-field"}), required=True)  # Use TextInput
 
     class Meta:
         model = User
@@ -28,7 +28,7 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])  # Hash password
+        user.set_password(self.cleaned_data['password'])  # Hash password before saving
         if commit:
             user.save()
             UserProfile.objects.create(

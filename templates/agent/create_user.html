@@ -18,11 +18,43 @@
         {% for field in form %}
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">{{ field.label }}</label>
-                <input type="{{ field.field.widget.input_type }}" 
-                       name="{{ field.name }}" 
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500 outline-none"
-                       placeholder="{{ field.label }}" required>
-                
+
+                {% if field.name == "username" %}
+                    <div class="flex">
+                        <input type="text" name="username" id="username" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500 outline-none"
+                               placeholder="Generated Username" required>
+                        <button type="button" onclick="generateUsername()" 
+                                class="ml-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">
+                            Generate
+                        </button>
+                    </div>
+
+                {% elif field.name == "password" %}
+                    <div class="flex relative">
+                        <input type="password" name="password" id="password-field"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500 outline-none"
+                               placeholder="Generated Password" required>
+                        <button type="button" onclick="generatePassword()" 
+                                class="ml-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800">
+                            Generate
+                        </button>
+                        <button type="button" onclick="copyPassword()" 
+                                class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                            Copy
+                        </button>
+                        <button type="button" onclick="togglePassword()" 
+                                class="ml-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                            👁
+                        </button>
+                    </div>
+
+                {% else %}
+                    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 focus:border-blue-500 outline-none"
+                           placeholder="{{ field.label }}" required>
+                {% endif %}
+
                 {% if field.help_text %}
                     <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
                 {% endif %}
@@ -46,4 +78,40 @@
         </div>
     </form>
 </div>
+
+<script>
+    function generateUsername() {
+        const randomNum = Math.floor(Math.random() * 9000) + 1000; // Random 4-digit number
+        const username = "MailRu_user" + randomNum;
+        document.getElementById("username").value = username;
+    }
+
+    function generatePassword() {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+        let password = "";
+        for (let i = 0; i < 12; i++) {
+            password += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        const passwordField = document.getElementById("password-field");
+        passwordField.value = password;
+        passwordField.type = "text";  // Show generated password
+        setTimeout(() => passwordField.type = "password", 3000); // Hide after 3s
+    }
+
+    function copyPassword() {
+        const passwordField = document.getElementById("password-field");
+        passwordField.select();
+        document.execCommand("copy");
+        alert("Password copied!");
+    }
+
+    function togglePassword() {
+        const passwordField = document.getElementById("password-field");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+        } else {
+            passwordField.type = "password";
+        }
+    }
+</script>
 {% endblock %}

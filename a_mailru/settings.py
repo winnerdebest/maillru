@@ -10,6 +10,15 @@ Env.read_env()
 ENVIRONMENT = env('ENVIRONMENT', default='production')
 
 
+# For Session based logout 
+# Auto logout users after 30 minutes (1800 seconds) of inactivity
+SESSION_COOKIE_AGE = 1800  
+
+# Refresh session expiry time on every request
+SESSION_SAVE_EVERY_REQUEST = True
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
